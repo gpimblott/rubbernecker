@@ -140,7 +140,7 @@ var hbs = exphbs.create({
         var text = "<tr>"
                     + "<td>Started</td><td>" + started + "</td><td>" + startedPoints + "</td>"
                     + "</tr><tr>"
-                    + "<td>Unstarted</td><td>" + unstarted + "</td><td>" + unstartedPoints + "</td>"
+                    + "<td>Not Started</td><td>" + unstarted + "</td><td>" + unstartedPoints + "</td>"
                     + "</tr><tr>"
                     + "<td>Finished</td><td>" + finished + "</td><td>" + finishedPoints + "</td>"
                     + "</tr><tr>"
