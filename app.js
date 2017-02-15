@@ -126,7 +126,7 @@ var hbs = exphbs.create({
               finishedPoints += estimate;
             } else if (story.current_state === 'accepted') {
               finished++;
-              finishedPoints += story.estimate;
+              finishedPoints += estimate;
             } else if (story.current_state === 'unstarted') {
               unstarted++;
               unstartedPoints += estimate;
@@ -147,7 +147,7 @@ var hbs = exphbs.create({
                     + "<td>Unscheduled</td><td>" + unscheduled + "</td><td>" + unscheduledPoints + "</td>"
                     + "</tr><tr bgcolor='#fff8dc'>"
                     + "<td></td><td>" + (started+unstarted+finished+unscheduled) + "</td>"
-                    + "<td>" + (startedPoints + finishedPoints + unscheduledPoints) + "</td>"
+                    + "<td>" + (startedPoints + unstartedPoints +finishedPoints + unscheduledPoints) + "</td>"
                     + "</tr>";
 
         return text;
