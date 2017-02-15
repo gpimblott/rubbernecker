@@ -6,7 +6,7 @@ var pivotalApi = require('../lib/pivotalApi');
 var internals = {};
 
 internals.renderKanban = function (res, projects, title) {
-  var statuses = [ 'unstarted', 'started', 'finished' ];
+  var statuses = [ 'unscheduled', 'notstarted', 'started', 'finished','delivered','accepted' ];
   var queries = [];
 
   statuses.forEach(function (status) {
@@ -31,6 +31,13 @@ internals.renderKanban = function (res, projects, title) {
     }
 
     var statusMap = {};
+    statusMap [ 'started'] = { stories: [] };
+    statusMap [ 'finished'] = { stories: [] };
+    statusMap [ 'notstarted'] = { stories: [] };
+    statusMap [ 'unscheduled'] = { stories: [] };
+    statusMap [ 'delivered'] = { stories: [] };
+    statusMap [ 'accepted'] = { stories: [] };
+
 
     for (var queryResult in results) {
       var storyArray = results[ queryResult ];
@@ -38,17 +45,13 @@ internals.renderKanban = function (res, projects, title) {
       for (var i = 0; i < storyArray.length; i++) {
         var story = storyArray[i];
 
-        if (!(story.current_state in statusMap)) {
-          statusMap [ story.current_state ] = { stories: [] };
-        }
-
         statusMap [ story.current_state ].stories.push(story);
       }
     }
 
-    var notStarted = (statusMap [ 'unstarted' ]===undefined?[] : statusMap['unstarted'].stories);
-    var started = (statusMap [ 'started' ]===undefined?[] : statusMap['started'].stories);
-    var finished = (statusMap [ 'finished' ]===undefined?[] : statusMap['finished'].stories);
+    var notStarted = [].concat( statusMap['unscheduled'].stories).concat(statusMap['notstarted'].stories);
+    var started = [].concat( statusMap [ 'started' ].stories );
+    var finished = [].concat( statusMap['finished'].stories).concat( statusMap['accepted'].stories).concat( statusMap['delivered'].stories);
 
     res.render("kanban", {
       notStarted: notStarted,
