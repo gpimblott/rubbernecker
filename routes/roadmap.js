@@ -28,7 +28,7 @@ internals.getEpics = function (stories, epics, callback) {
   for (var j = 0; j < epics.length; j++) {
     var epic = epics[ j ];
 
-    if (epic.label.name in labelMap) {
+    if (epic.label && epic.label.name in labelMap) {
       results.push({ epic: epic, stories: labelMap[ epic.label.name ].stories });
     }
   }
