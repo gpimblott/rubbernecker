@@ -19,7 +19,7 @@
 
                 {{#each notStarted}}
                     <div class="row">
-                        <div class="panel panel-info">
+                        <div class="panel panel-danger">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
                                     <a href="/story/{{this.project_id}}/{{this.id}}">{{this.name}} </a>&nbsp;
@@ -58,7 +58,7 @@
 
                 {{#each started}}
                     <div class="row">
-                        <div class="panel panel-info">
+                        <div class="panel panel-warning">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
                                     <a href="/story/{{this.project_id}}/{{this.id}}">{{this.name}} </a>&nbsp;
@@ -97,7 +97,7 @@
 
                 {{#each finished}}
                     <div class="row">
-                        <div class="panel panel-info">
+                        <div class="panel panel-success">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
                                     <a href="/story/{{this.project_id}}/{{this.id}}">{{this.name}} </a>&nbsp;
