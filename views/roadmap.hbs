@@ -70,11 +70,11 @@
                                         {{#with this.summary}}
                                             <table width="100%">
                                                 <tr>
-                                                    <td>Stories</td>
+                                                    <td><strong>Stories</strong></td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <small>Not Started:{{storiesNotStarted}}&nbsp;Started:{{started}}&nbsp;finished:{{finished}}</small>
+                                                        <small>Not Started:{{storiesNotStarted}}&nbsp;Started:{{started}}&nbsp;Finished:{{finished}}</small>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -107,11 +107,11 @@
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Points</td>
+                                                    <td><strong>Points</strong></td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <small>Not Started:{{pointsNotStarted}}&nbsp;Started:{{startedPoints}}&nbsp;finished:{{finishedPoints}}</small>
+                                                        <small>Not Started:{{pointsNotStarted}}&nbsp;Started:{{startedPoints}}&nbsp;Finished:{{finishedPoints}}</small>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -153,14 +153,11 @@
 
                         <div class="row">
                             <div class="col-md-12">
-
                                 {{#each this.data}}
                                     {{>milestonecard}}
                                 {{/each}}
                             </div>
-
                         </div>
-
                     </div>
                 </div>
 
