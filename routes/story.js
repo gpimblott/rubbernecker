@@ -16,9 +16,18 @@ router.get('/:projectId/:storyId', function (req, res, next) {
       });
 
     } else {
-      res.render("story", {
-        story: story
+
+      storyFetcher.getTasksForStory( res , projectId, storyId , function( error, tasks ) {
+
+        console.log("Tasks:" + tasks);
+        console.log("Stories:" + story);
+
+        res.render("story", {
+          story: story,
+          tasks: tasks
+        });
       });
+
     }
   })
 
