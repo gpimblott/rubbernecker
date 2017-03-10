@@ -84,8 +84,10 @@ router.get('/', function (req, res, next) {
 
             var resultsArray = [];
             for (var i = 0; i < milestoneNames.length; i++) {
-              resultsArray.push({ title: milestoneNames[ i ] , data: results[ i ]});
+              var summary = storyFetcher.milestoneSummary(results[ i ]);
+              resultsArray.push({ title: milestoneNames[ i ], data: results[ i ], summary: summary });
             }
+
             res.render("roadmap", {
               milestones: resultsArray
             });
