@@ -36,8 +36,8 @@ var pivotalProjectId = process.env.PIVOTAL_PROJECT_ID || 'You need to set a proj
 app.set('pivotalProjectId', pivotalProjectId);
 
 // Setup the Google Analytics ID if defined
-self.app.locals.google_id = process.env.GOOGLE_ID || undefined;
-console.log("GA ID:" + self.app.locals.google_id);
+app.locals.google_id = process.env.GOOGLE_ID || undefined;
+console.log("GA ID:" + app.locals.google_id);
 
 var reviewSlotsLimit = process.env.REVIEW_SLOTS_LIMIT || 4;
 app.set('reviewSlotsLimit', reviewSlotsLimit);
