@@ -24,12 +24,12 @@ npm install
 After completing above installation instructions, to run locally without Basic Authentication:
 
 ``` 
-DEBUG=rubbernecker:* PIVOTAL_API_KEY=your-api-key PIVOTAL_PROJECT_ID=your-project-id npm start
+DEBUG=rubbernecker:* PIVOTAL_API_KEY=your-api-key DEFAULT_PROJECTS=your-project-id's npm start
 ```
 
 If you want to try out the stunning Basic Auth (useful for when you don't want everyone getting straight to your story overviews)
 ``` 
-DEBUG=rubbernecker:* PIVOTAL_API_KEY=your-api-key PIVOTAL_PROJECT_ID=your-project-id USE_AUTH=true USERNAME=username PASSWORD=password npm start
+DEBUG=rubbernecker:* PIVOTAL_API_KEY=your-api-key DEFAULT_PROJECTS=your-project-id's USE_AUTH=true USERNAME=username PASSWORD=password npm start
 ```
 
 ### Deploying
