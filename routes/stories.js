@@ -21,6 +21,24 @@ router.get('/', function (req, res, next) {
 
 });
 
+router.get("/bugs", function (req, res, next) {
+
+  storyFetcher.getAllBugs(res, res.app.get('defaultProjects'), function (error, stories) {
+
+    if (error) {
+
+      res.render('damn', {
+        message: '┬──┬◡ﾉ(° -°ﾉ)',
+        status: error,
+        reason: "(╯°□°）╯︵ ┻━┻"
+      });
+
+    } else {
+      utils.renderStories(res, stories, "Bugs");
+    }
+  });
+});
+
 router.get('/:status', function (req, res, next) {
   var status = req.params[ "status" ];
 
@@ -38,5 +56,6 @@ router.get('/:status', function (req, res, next) {
   });
 
 });
+
 
 module.exports = router;
