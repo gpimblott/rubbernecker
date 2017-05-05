@@ -34,10 +34,10 @@ internals.getEpics = function (stories, epics, callback) {
     }
   }
 
-  callback(null, results);
+  callback(null, results, stories);
 }
 
-internals.getEpicsForMilestones = function (res, epics, name, callback) {
+internals.getMilestoneGetEpicsAndStories = function (res, epics, name, callback) {
   // Now get the labels we are interested in
   storyFetcher.getAllStoriesWithLabel(res, name, res.app.get('defaultProjects'), function (error, stories) {
     if (error) {
@@ -69,13 +69,13 @@ router.get('/', function (req, res, next) {
       var functionArray = [];
       for (var i = 0; i < milestoneNames.length; i++) {
         debug("Processing milestone: %s" , milestoneNames[i]);
-        functionArray.push(internals.getEpicsForMilestones.bind(null, res, epics, milestoneNames[ i ]));
+        functionArray.push(internals.getMilestoneGetEpicsAndStories.bind(null, res, epics, milestoneNames[ i ]));
       }
 
       async.parallel(
         functionArray,
 
-        function (err, results) {
+        function (err, results ) {
           if (err) {
             res.render('damn', {
               message: '┬──┬◡ﾉ(° -°ﾉ)',
@@ -86,8 +86,8 @@ router.get('/', function (req, res, next) {
 
             var resultsArray = [];
             for (var i = 0; i < milestoneNames.length; i++) {
-              var summary = storyFetcher.milestoneSummary(results[ i ]);
-              resultsArray.push({ title: milestoneNames[ i ], data: results[ i ], summary: summary });
+              var summary = storyFetcher.milestoneSummary(results[i][1]);
+              resultsArray.push({ title: milestoneNames[ i ], data: results[ i ][0], summary: summary });
             }
 
             res.render("roadmap", {
