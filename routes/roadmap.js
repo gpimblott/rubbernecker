@@ -1,3 +1,4 @@
+var debug = require('debug')('rubbernecker:roadmap');
 var express = require('express');
 var router = express.Router();
 var async = require('async');
@@ -67,6 +68,7 @@ router.get('/', function (req, res, next) {
       var milestoneNames = res.app.get('milestoneLabels');
       var functionArray = [];
       for (var i = 0; i < milestoneNames.length; i++) {
+        debug("Processing milestone: %s" , milestoneNames[i]);
         functionArray.push(internals.getEpicsForMilestones.bind(null, res, epics, milestoneNames[ i ]));
       }
 
