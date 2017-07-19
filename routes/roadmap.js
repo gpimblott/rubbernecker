@@ -9,43 +9,43 @@ var epicFetcher = require('../lib/epicFetcher');
 var internals = {};
 
 internals.getEpics = function (stories, epics, callback) {
-  var labelMap = {};
-  var results = [];
+    var labelMap = {};
+    var results = [];
 
-  for (var i = 0; i < stories.length; i++) {
-    var story = stories[ i ];
+    for (var i = 0; i < stories.length; i++) {
+        var story = stories[ i ];
 
-    for (var j = 0; j < story.labels.length; j++) {
-      var storyLabel = story.labels[ j ].name;
+        for (var j = 0; j < story.labels.length; j++) {
+            var storyLabel = story.labels[ j ].name;
 
-      if (!(storyLabel in labelMap)) {
-        labelMap[ storyLabel ] = { stories: [ story ], epic: undefined };
-      } else {
-        labelMap[ storyLabel ].stories.push(story);
-      }
+            if (!(storyLabel in labelMap)) {
+                labelMap[ storyLabel ] = { stories: [ story ], epic: undefined };
+            } else {
+                labelMap[ storyLabel ].stories.push(story);
+            }
+        }
     }
-  }
 
-  for (var j = 0; j < epics.length; j++) {
-    var epic = epics[ j ];
+    for (var j = 0; j < epics.length; j++) {
+        var epic = epics[ j ];
 
-    if (epic.label && epic.label.name in labelMap) {
-      results.push({ epic: epic, stories: labelMap[ epic.label.name ].stories });
+        if (epic.label && epic.label.name in labelMap) {
+            results.push({ epic: epic, stories: labelMap[ epic.label.name ].stories });
+        }
     }
-  }
 
-  callback(null, results, stories);
+    callback(null, results, stories);
 }
 
 internals.getMilestoneGetEpicsAndStories = function (res, epics, name, callback) {
-  // Now get the labels we are interested in
-  storyFetcher.getAllStoriesWithLabel(res, name, res.app.get('defaultProjects'), function (error, stories) {
-    if (error) {
-      callback(error, null);
-    } else {
-      internals.getEpics(stories, epics, callback);
-    }
-  });
+    // Now get the labels we are interested in
+    storyFetcher.getAllStoriesWithLabel(res, name, res.app.get('defaultProjects'), function (error, stories) {
+        if (error) {
+            callback(error, null);
+        } else {
+            internals.getEpics(stories, epics, callback);
+        }
+    });
 }
 
 /**
@@ -53,50 +53,54 @@ internals.getMilestoneGetEpicsAndStories = function (res, epics, name, callback)
  */
 router.get('/', function (req, res, next) {
 
-  // Get all the Epics first
-  epicFetcher.getAllEpics(res, res.app.get('defaultProjects'), function (error, epics) {
+    // Get all the Epics first
+    epicFetcher.getAllEpics(res, res.app.get('defaultProjects'), function (error, epics) {
 
-    if (error) {
-      res.render('damn', {
-        message: '┬──┬◡ﾉ(° -°ﾉ)',
-        status: error,
-        reason: "(╯°□°）╯︵ ┻━┻"
-      });
-
-    } else {
-
-      var milestoneNames = res.app.get('milestoneLabels');
-      var functionArray = [];
-      for (var i = 0; i < milestoneNames.length; i++) {
-        debug("Processing milestone: %s" , milestoneNames[i]);
-        functionArray.push(internals.getMilestoneGetEpicsAndStories.bind(null, res, epics, milestoneNames[ i ]));
-      }
-
-      async.parallel(
-        functionArray,
-
-        function (err, results ) {
-          if (err) {
+        if (error) {
             res.render('damn', {
-              message: '┬──┬◡ﾉ(° -°ﾉ)',
-              status: err,
-              reason: "(╯°□°）╯︵ ┻━┻"
+                message: '┬──┬◡ﾉ(° -°ﾉ)',
+                status: error,
+                reason: "(╯°□°）╯︵ ┻━┻"
             });
-          } else {
 
-            var resultsArray = [];
+        } else {
+
+            var milestoneNames = res.app.get('milestoneLabels');
+            var functionArray = [];
             for (var i = 0; i < milestoneNames.length; i++) {
-              var summary = storyFetcher.milestoneSummary(results[i][1]);
-              resultsArray.push({ title: milestoneNames[ i ], data: results[ i ][0], summary: summary });
+                debug("Processing milestone: %s", milestoneNames[ i ]);
+                functionArray.push(internals.getMilestoneGetEpicsAndStories.bind(null, res, epics, milestoneNames[ i ]));
             }
 
-            res.render("roadmap", {
-              milestones: resultsArray
-            });
-          }
-        });
-    }
-  });
+            async.parallel(
+                functionArray,
+
+                function (err, results) {
+                    if (err) {
+                        res.render('Problem', {
+                            message: '┬──┬◡ﾉ(° -°ﾉ)',
+                            status: err,
+                            reason: "(╯°□°）╯︵ ┻━┻"
+                        });
+                    } else {
+
+                        var resultsArray = [];
+                        for (var i = 0; i < milestoneNames.length; i++) {
+                            var summary = storyFetcher.milestoneSummary(results[ i ][ 1 ]);
+                            resultsArray.push({
+                                title: milestoneNames[ i ],
+                                data: results[ i ][ 0 ],
+                                summary: summary
+                            });
+                        }
+
+                        res.render("roadmap", {
+                            milestones: resultsArray
+                        });
+                    }
+                });
+        }
+    });
 });
 
 module.exports = router;
