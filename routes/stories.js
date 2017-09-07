@@ -54,7 +54,7 @@ router.get("/notassigned", function (req, res, next) {
             });
 
         } else {
-            utils.renderStories(res, stories, "Bugs");
+            utils.renderStories(res, stories, "Not Assigned");
         }
     });
 });
