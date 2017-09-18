@@ -19,6 +19,7 @@ var roadmap = require('./routes/roadmap');
 var kanban = require('./routes/kanban');
 var search = require('./routes/search');
 var story = require('./routes/story');
+var release = require('./routes/releases');
 
 var bhsUtils = require('./lib/handlebarsHelpers');
 
@@ -48,11 +49,11 @@ app.set('milestoneLabels', milestoneLabels.split(','));
 var hbs = exphbs.create({
     // Specify helpers which are only registered on this instance.
     helpers: {
-      dateFormat: hdf,
+        dateFormat: hdf,
     },
     defaultLayout: 'main',
     extname: '.hbs'
-  });
+});
 
 app.engine('hbs', hbs.engine);
 
@@ -60,9 +61,9 @@ app.set('view engine', 'hbs');
 
 var useAuth = process.env.USE_AUTH || 'false'
 if (useAuth === 'true') {
-  var username = process.env.USERNAME
-  var password = process.env.PASSWORD
-  app.use(utils.basicAuth(username, password))
+    var username = process.env.USERNAME
+    var password = process.env.PASSWORD
+    app.use(utils.basicAuth(username, password))
 }
 
 // view engine setup
@@ -75,17 +76,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: false
+    extended: false
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 projectFetcher.buildProjectCache(app.get('pivotalApiKey'), app.get('defaultProjects'));
+projectFetcher.buildReleaseCache(app.get('pivotalApiKey'), app.get('defaultProjects'));
 
 app.use(function (req, res, next) {
-  res.locals.projects = projectFetcher.getProjectSummary();
-  res.locals.defaultLabels = app.get('defaultLabels');
-  next();
+    res.locals.projects = projectFetcher.getProjectSummary();
+    res.locals.releases = projectFetcher.getProjectReleases()
+    res.locals.defaultLabels = app.get('defaultLabels');
+    next();
 });
 
 app.use('/', routes);
@@ -97,12 +100,13 @@ app.use('/roadmap', roadmap);
 app.use('/kanban', kanban);
 app.use('/search', search);
 app.use('/story', story);
+app.use('/release', release);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
@@ -110,23 +114,23 @@ app.use(function (req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
     });
-  });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
 
 module.exports = app;

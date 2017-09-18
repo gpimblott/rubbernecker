@@ -23,7 +23,7 @@ internals.renderKanban = function (res, projects, title) {
 
   var query = queries.length === 0 ? "[]" : "[\"" + queries.join("\",\"") + "\"]";
 
-  pivotalApi.aggregateQuery(res, query, function (error, results) {
+  pivotalApi.aggregateQuery(res.app.get('pivotalApiKey'), query, function (error, results) {
 
     if (error) {
       callback(error, null);
