@@ -1,0 +1,52 @@
+<!-- Jumbotron Header -->
+<div class="page-header">
+    <h1>Estimates</h1>
+    <p>Where did those {{point_difference}} points come from since {{date_since}} ?</p>
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-12 center-block">
+        <table id="storyTable" class="table display">
+            <thead>
+            <tr>
+                <th>When</th>
+                <th>Story</th>
+                <th>Message</th>
+                <th>Performed by</th>
+                <th>Project</th>
+                <th>Original</th>
+                <th>New</th>
+                <th>Difference</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each activities}}
+                <tr>
+                    <td>{{this.occurred_at}}</td>
+                    <td><a href="{{this.story_url}}">{{this.story_name}}&nbsp</a></td>
+                    <td>{{this.message}}</td>
+                    <td>{{this.performed_by}}</td>
+                    <td>{{this.project}}</td>
+                    <td>{{this.original_estimate}}</td>
+                    <td>{{this.new_estimate}}</td>
+                    {{#is_positive this.difference}}
+                        <td bgcolor="red">{{this.difference}}</td>
+                    {{else}}
+                        <td>{{this.difference}}</td>
+                    {{/is_positive}}
+
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#storyTable').DataTable();
+    } );
+</script>

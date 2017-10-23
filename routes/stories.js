@@ -56,16 +56,14 @@ router.get("/since/:changetype/:days?", function (req, res, next) {
 
     var queryDate = new Date();
     queryDate.setDate(queryDate.getDate() - days);
-    queryDate.setMinutes(0);
-    queryDate.setHours(0);
-    queryDate.setSeconds(0);
+    queryDate.setUTCHours(0,0,0,1);
 
     var dateSince = queryDate.toISOString();
 
     var renderFunction = function (error, stories) {
 
         if (error) {
-            res.render('Oh dear', {
+            res.render('damn', {
                 message: '┬──┬◡ﾉ(° -°ﾉ)',
                 status: error,
                 reason: "(╯°□°）╯︵ ┻━┻"

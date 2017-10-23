@@ -20,6 +20,7 @@ var kanban = require('./routes/kanban');
 var search = require('./routes/search');
 var story = require('./routes/story');
 var release = require('./routes/releases');
+var analysis = require('./routes/analysis');
 
 var bhsUtils = require('./lib/handlebarsHelpers');
 
@@ -101,6 +102,7 @@ app.use('/kanban', kanban);
 app.use('/search', search);
 app.use('/story', story);
 app.use('/release', release);
+app.use('/analysis' , analysis);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
