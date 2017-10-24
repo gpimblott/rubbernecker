@@ -12,7 +12,7 @@ router.get('/:projectid/:releaseid/', function (req, res, next) {
 
     storyFetcher.getAllStoriesForRelease(res, projectid, releaseid, function (error, stories) {
         if (error) {
-            res.render('Oh dear', {
+            res.render('damn', {
                 message: 'Something went wrong getting release',
                 status: error,
                 reason: "Unknown"
