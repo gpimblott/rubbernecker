@@ -51,7 +51,21 @@ internals.getMilestoneGetEpicsAndStories = function (res, epics, name, callback)
 /**
  * Routes
  */
-router.get('/', function (req, res, next) {
+router.get ('/' , function (req,res,next) {
+    var milestoneNames = res.app.get('milestoneLabels');
+    var path = "/roadmap/";
+    for (var i = 0; i < milestoneNames.length; i++) {
+        path += milestoneNames[i] + "/";
+    }
+
+    res.redirect(path);
+
+});
+
+router.get('/:label1/:label2/:label3/', function (req, res, next) {
+    const label1 = req.params[ "label1" ];
+    const label2 = req.params[ "label2" ];
+    const label3 = req.params[ "label3" ];
 
     // Get all the Epics first
     epicFetcher.getAllEpics(res, res.app.get('defaultProjects'), function (error, epics) {
@@ -65,7 +79,8 @@ router.get('/', function (req, res, next) {
 
         } else {
 
-            var milestoneNames = res.app.get('milestoneLabels');
+            //var milestoneNames = res.app.get('milestoneLabels');
+            var milestoneNames = [label1 , label2 , label3 ];
             var functionArray = [];
             for (var i = 0; i < milestoneNames.length; i++) {
                 debug("Processing milestone: %s", milestoneNames[ i ]);
